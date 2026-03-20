@@ -3,7 +3,7 @@ USE line_db;
 -- ================================
 -- 라인 테이블
 -- ================================
-CREATE TABLE lines (
+CREATE TABLE `lines` (
     line_id     INT          AUTO_INCREMENT PRIMARY KEY,
     line_number VARCHAR(20)  NOT NULL UNIQUE  COMMENT '예: LINE-1',
     line_name   VARCHAR(100) NOT NULL         COMMENT '예: 조립 라인 A',
@@ -29,7 +29,7 @@ CREATE TABLE vehicles (
     status             VARCHAR(20)  DEFAULT 'PENDING' COMMENT 'PENDING/PROCESSING/QC_PASS/QC_FAIL/COMPLETED',
     created_at         DATETIME     NOT NULL,
     updated_at         DATETIME     NOT NULL,
-    FOREIGN KEY (current_line_id) REFERENCES lines(line_id)
+    FOREIGN KEY (current_line_id) REFERENCES `lines`(line_id)
 );
 
 -- ================================
@@ -45,7 +45,7 @@ CREATE TABLE process_history (
     completed_at     DATETIME,
     duration_minutes INT,
     FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id),
-    FOREIGN KEY (line_id)    REFERENCES lines(line_id)
+    FOREIGN KEY (line_id)    REFERENCES `lines`(line_id)
 );
 
 -- ================================
@@ -58,7 +58,7 @@ CREATE TABLE line_stats (
     operation_rate  DECIMAL(5,2)          COMMENT '가동률(%)',
     completed_count INT                   COMMENT '완료 차량 수',
     avg_cycle_time  INT                   COMMENT '평균 사이클타임(분)',
-    FOREIGN KEY (line_id) REFERENCES lines(line_id)
+    FOREIGN KEY (line_id) REFERENCES `lines`(line_id)
 );
 
 -- ================================
