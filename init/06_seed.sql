@@ -1,0 +1,47 @@
+-- ================================
+-- 관리자 계정 (order_db)
+-- ================================
+USE order_db;
+
+INSERT INTO member (email, password) VALUES
+('admin@factory.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+-- 비밀번호 원문: admin1234 (BCrypt 암호화)
+
+
+-- ================================
+-- 라인 초기 데이터 (line_db)
+-- ================================
+USE line_db;
+
+INSERT INTO `lines` (line_number, line_name, line_type, line_status, created_at, updated_at) VALUES
+('LINE-1', '차체 라인 A', '차체',    'NORMAL', NOW(), NOW()),
+('LINE-2', '차체 라인 B', '차체',    'NORMAL', NOW(), NOW()),
+('LINE-3', '도장 라인 A',  '도장',    'NORMAL', NOW(), NOW()),
+('LINE-4', '도장 라인 B',  '도장',    'NORMAL', NOW(), NOW()),
+('LINE-5', '조립 라인 A', '조립',    'NORMAL', NOW(), NOW()),
+('LINE-6', '조립 라인 B', '조립',    'NORMAL', NOW(), NOW()),
+('LINE-7', 'QC 라인',    '품질검사', 'NORMAL', NOW(), NOW());
+
+
+-- ================================
+-- 부품 초기 재고 (inventory_db)
+-- ================================
+USE inventory_db;
+
+INSERT INTO parts (part_name, part_code, current_stock, min_stock, unit, created_at, updated_at) VALUES
+-- 파워트레인 스테이션 부품
+('엔진',           'ENG-001', 50,  10, '개',  NOW(), NOW()),
+('변속기',         'TRN-001', 50,  10, '개',  NOW(), NOW()),
+('드라이브샤프트', 'DRV-001', 100, 20, '개',  NOW(), NOW()),
+-- 섀시 스테이션 부품
+('타이어',         'TIR-001', 200, 40, '세트', NOW(), NOW()),
+('브레이크세트',   'BRK-001', 100, 20, '세트', NOW(), NOW()),
+('서스펜션',       'SUS-001', 100, 20, '세트', NOW(), NOW()),
+-- 전장 스테이션 부품
+('배터리',         'BAT-001', 50,  10, '개',  NOW(), NOW()),
+('ECU',            'ECU-001', 50,  10, '개',  NOW(), NOW()),
+('센서',           'SEN-001', 200, 40, '개',  NOW(), NOW()),
+-- 내부조립 스테이션 부품
+('시트',           'SEA-001', 100, 20, '세트', NOW(), NOW()),
+('에어백',         'AIR-001', 100, 20, '개',  NOW(), NOW()),
+('내부부품',       'INT-001', 100, 20, '세트', NOW(), NOW());
