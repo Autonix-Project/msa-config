@@ -1,0 +1,18 @@
+-- ================================
+-- DB 생성
+-- ================================
+CREATE DATABASE IF NOT EXISTS line_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE IF NOT EXISTS order_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE IF NOT EXISTS inventory_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+CREATE DATABASE IF NOT EXISTS shipping_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
