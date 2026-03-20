@@ -4,11 +4,11 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: factory-mysql
+    container_name: autonix-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./init:/docker-entrypoint-initdb.d
       - mysql-data:/var/lib/mysql
