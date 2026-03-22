@@ -1,14 +1,4 @@
 -- ================================
--- 관리자 계정 (order_db)
--- ================================
-USE order_db;
-
-INSERT INTO member (email, password) VALUES
-('admin@factory.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
--- 비밀번호 원문: admin1234 (BCrypt 암호화)
-
-
--- ================================
 -- 라인 초기 데이터 (line_db)
 -- ================================
 USE line_db;
