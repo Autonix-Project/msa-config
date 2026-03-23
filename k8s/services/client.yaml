@@ -1,0 +1,47 @@
+# VITE_* 환경변수는 빌드 시점에 번들에 인라인됨
+# EKS에서는 ECR 이미지 빌드 시 --build-arg로 주입하거나
+# CI/CD(GitHub Actions)에서 빌드 인자로 넘겨야 함
+# 런타임 env로는 적용 안 됨 (Vite 특성)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  namespace: autonix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: <ECR_REGISTRY>/autonix/client:latest
+          # 이미지 빌드 시 아래 ARG 주입 필요:
+          # --build-arg VITE_LINE_API_URL=http://<ALB_DNS>/line
+          # --build-arg VITE_SHIPPING_API_URL=http://<ALB_DNS>/shipping
+          # --build-arg VITE_INVENTORY_API_URL=http://<ALB_DNS>/inventory
+          # --build-arg VITE_GATEWAY_URL=http://<ALB_DNS>
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-svc
+  namespace: autonix
+spec:
+  selector:
+    app: client
+  ports:
+    - port: 80
+      targetPort: 80
