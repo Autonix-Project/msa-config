@@ -1,4 +1,3 @@
-# TODO: order-service 포트 확인 후 수정 (현재 임시 8082)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +17,7 @@ spec:
         - name: order-service
           image: <ECR_REGISTRY>/autonix/order-service:latest
           ports:
-            - containerPort: 8082   # TODO: 실제 포트 확인
+            - containerPort: 8082
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "docker"
@@ -54,5 +53,5 @@ spec:
   selector:
     app: order-service
   ports:
-    - port: 8082    # TODO: 실제 포트 확인
+    - port: 8082
       targetPort: 8082
