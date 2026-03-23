@@ -23,7 +23,7 @@ CREATE TABLE inventory_transactions (
     transaction_type VARCHAR(10) NOT NULL COMMENT 'IN/OUT',
     quantity         INT         NOT NULL,
     remaining_stock  INT         NOT NULL,
-    vehicle_id       INT         NOT NULL COMMENT '차감 시 참조',
+    vehicle_id       INT                  COMMENT '차감 시 참조',
     order_number     VARCHAR(20)          COMMENT '예: ORD-001',
     created_at       DATETIME    NOT NULL,
     FOREIGN KEY (part_id) REFERENCES parts(part_id)
