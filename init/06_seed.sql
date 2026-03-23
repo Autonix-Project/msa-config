@@ -35,3 +35,23 @@ INSERT INTO parts (part_name, part_code, current_stock, min_stock, unit, created
 ('시트',           'SEA-001', 100, 20, '세트', NOW(), NOW()),
 ('에어백',         'AIR-001', 100, 20, '개',  NOW(), NOW()),
 ('내부부품',       'INT-001', 100, 20, '세트', NOW(), NOW());
+
+-- ================================
+-- 라인 통계 데이터 (line_stats)
+-- ================================
+USE line_db;
+
+INSERT INTO line_stats (line_id, stat_date, operation_rate, completed_count, avg_cycle_time)
+SELECT line_id, CURDATE(), 92.5, 38, 46 FROM `lines` WHERE line_number = 'LINE-1'
+UNION ALL
+SELECT line_id, CURDATE(), 88.2, 34, 52 FROM `lines` WHERE line_number = 'LINE-2'
+UNION ALL
+SELECT line_id, CURDATE(), 79.4, 29, 61 FROM `lines` WHERE line_number = 'LINE-3'
+UNION ALL
+SELECT line_id, CURDATE(), 84.7, 31, 55 FROM `lines` WHERE line_number = 'LINE-4'
+UNION ALL
+SELECT line_id, CURDATE(), 90.1, 36, 48 FROM `lines` WHERE line_number = 'LINE-5'
+UNION ALL
+SELECT line_id, CURDATE(), 86.8, 33, 53 FROM `lines` WHERE line_number = 'LINE-6'
+UNION ALL
+SELECT line_id, CURDATE(), 93.3, 40, 44 FROM `lines` WHERE line_number = 'LINE-7';
