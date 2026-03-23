@@ -94,7 +94,10 @@ services:
       context: ../client
       dockerfile: Dockerfile
       args:
-        VITE_API_BASE_URL: http://localhost:8085
+        VITE_LINE_API_URL: http://localhost:8083
+        VITE_SHIPPING_API_URL: http://localhost:8085
+        VITE_INVENTORY_API_URL: http://localhost:8084
+        VITE_GATEWAY_URL: http://localhost:8081
     container_name: autonix-client
     ports:
       - "3000:80"
@@ -129,6 +132,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_KAFKA_SERVER=kafka:29092
+      - SPRING_KAFKA_CONSUMER_GROUP_ID=shipping-group
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
     depends_on:
       mysql:
