@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator-service
+  namespace: autonix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simulator-service
+  template:
+    metadata:
+      labels:
+        app: simulator-service
+    spec:
+      containers:
+        - name: simulator-service
+          image: <ECR_REGISTRY>/autonix/simulator-service:latest
+          ports:
+            - containerPort: 8086
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SPRING_DATA_REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: REDIS_HOST
+            - name: SPRING_DATA_REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: REDIS_PORT
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: EUREKA_URL
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8086
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simulator-service-svc
+  namespace: autonix
+spec:
+  selector:
+    app: simulator-service
+  ports:
+    - port: 8086
+      targetPort: 8086

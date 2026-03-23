@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: autonix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: <ECR_REGISTRY>/autonix/api-gateway:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: SPRING_DATA_REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: REDIS_HOST
+            - name: SPRING_DATA_REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: REDIS_PORT
+            - name: LINE_SERVICE_URL
+              value: "http://line-service-svc:8083"
+            - name: SHIPPING_SERVICE_URL
+              value: "http://shipping-service-svc:8085"
+            - name: INVENTORY_SERVICE_URL
+              value: "http://inventory-service-svc:8084"
+            - name: SIMULATOR_SERVICE_URL
+              value: "http://simulator-service-svc:8086"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-service
+  namespace: autonix
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - port: 8081
+      targetPort: 8081

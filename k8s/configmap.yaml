@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: autonix-config
+  namespace: autonix
+data:
+  # -------------------------------------------------------
+  # DB 설정
+  # 옵션 A (컨테이너 MySQL): 아래 값 그대로 사용
+  # 옵션 B (RDS):            MYSQL_HOST를 RDS 엔드포인트로 교체
+  #   예) MYSQL_HOST: "autonix.xxxxxx.ap-northeast-2.rds.amazonaws.com"
+  # -------------------------------------------------------
+  MYSQL_HOST: "mysql-service"
+  MYSQL_PORT: "3306"
+
+  # -------------------------------------------------------
+  # Kafka 설정
+  # 옵션 A (컨테이너 Kafka): 아래 값 그대로 사용
+  # 옵션 B (MSK):            KAFKA_BOOTSTRAP_SERVERS를 MSK 브로커 엔드포인트로 교체
+  #   예) KAFKA_BOOTSTRAP_SERVERS: "b-1.autonix.xxxxxx.kafka.ap-northeast-2.amazonaws.com:9092"
+  # -------------------------------------------------------
+  KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+
+  # Redis
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+
+  # Eureka (api-gateway 안에 있거나 별도 서비스로 띄운 경우)
+  EUREKA_URL: "http://api-gateway-service:8761/eureka/"
+
+  # 각 서비스 URL (클라이언트 빌드 시 주입)
+  VITE_LINE_API_URL: "http://line-service-svc:8083"
+  VITE_SHIPPING_API_URL: "http://shipping-service-svc:8085"
+  VITE_INVENTORY_API_URL: "http://inventory-service-svc:8084"
+  VITE_GATEWAY_URL: "http://api-gateway-service:8081"

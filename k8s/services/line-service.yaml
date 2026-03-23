@@ -1,0 +1,65 @@
+# TODO: image 값의 ECR_REGISTRY, AWS_REGION을 실제 값으로 교체
+# 예) 123456789012.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/line-service:latest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: line-service
+  namespace: autonix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: line-service
+  template:
+    metadata:
+      labels:
+        app: line-service
+    spec:
+      containers:
+        - name: line-service
+          image: <ECR_REGISTRY>/autonix/line-service:latest
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: KAFKA_BOOTSTRAP_SERVERS
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: autonix-config
+                  key: EUREKA_URL
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://mysql-service:3306/line_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: autonix-secrets
+                  key: DB_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: autonix-secrets
+                  key: DB_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8083
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: line-service-svc
+  namespace: autonix
+spec:
+  selector:
+    app: line-service
+  ports:
+    - port: 8083
+      targetPort: 8083

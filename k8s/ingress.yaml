@@ -1,0 +1,65 @@
+# AWS Load Balancer Controller 설치 필요
+# kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
+# helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system ...
+#
+# <ALB_DNS> 자리는 배포 후 ALB DNS로 교체
+# 또는 Route53 도메인 연결 시 host 기반 라우팅으로 변경
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: autonix-ingress
+  namespace: autonix
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    # HTTPS 사용 시:
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:...
+spec:
+  rules:
+    - http:
+        paths:
+          # 프론트엔드
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: client-svc
+                port:
+                  number: 80
+
+          # API Gateway (라우팅 구현 완료 후 모든 /api/* 여기로)
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+                port:
+                  number: 8081
+
+          # api-gateway RouteConfig 미완성인 경우: 서비스 직접 라우팅
+          - path: /lines
+            pathType: Prefix
+            backend:
+              service:
+                name: line-service-svc
+                port:
+                  number: 8083
+
+          - path: /shippings
+            pathType: Prefix
+            backend:
+              service:
+                name: shipping-service-svc
+                port:
+                  number: 8085
+
+          - path: /inventory
+            pathType: Prefix
+            backend:
+              service:
+                name: inventory-service-svc
+                port:
+                  number: 8084
