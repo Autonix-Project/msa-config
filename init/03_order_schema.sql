@@ -14,7 +14,7 @@ CREATE TABLE member (
 -- ================================
 CREATE TABLE orders (
     order_id       INT          AUTO_INCREMENT PRIMARY KEY,
-    member_id      INT          NOT NULL         COMMENT 'FK → member',
+    member_id      INT                           COMMENT 'FK → member (optional)',
     order_number   VARCHAR(20)  NOT NULL UNIQUE  COMMENT '예: ORD-ABC123',
     destination    VARCHAR(20)  NOT NULL,
     status         VARCHAR(50)  NOT NULL DEFAULT 'READY' COMMENT 'READY/IN_PROGRESS/COMPLETED',
@@ -23,6 +23,5 @@ CREATE TABLE orders (
     car_model      VARCHAR(100)          COMMENT 'vehicles.car_model 참조',
     total_quantity INT          NOT NULL,
     created_at     DATETIME     NOT NULL,
-    updated_at     DATETIME     NOT NULL,
-    FOREIGN KEY (member_id) REFERENCES member(member_id)
+    updated_at     DATETIME     NOT NULL
 );
