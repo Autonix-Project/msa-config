@@ -135,6 +135,7 @@ services:
       - SPRING_KAFKA_KAFKA_SERVER=kafka:29092
       - SPRING_KAFKA_CONSUMER_GROUP_ID=shipping-group
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - ORDER_SERVICE_URL=http://order-service:8082
     depends_on:
       mysql:
         condition: service_healthy
