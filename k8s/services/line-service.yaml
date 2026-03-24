@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: line-service
-          image: <ECR_REGISTRY>/autonix/line-service:latest
+          image: 088153173875.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/line-service:latest
           ports:
             - containerPort: 8083
           env:
@@ -34,7 +34,7 @@ spec:
                   name: autonix-config
                   key: EUREKA_URL
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://mysql-service:3306/line_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
+              value: "jdbc:mysql://autonix.cfsm44ue6k13.ap-northeast-2.rds.amazonaws.com:3306/line_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

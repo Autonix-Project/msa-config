@@ -15,14 +15,14 @@ spec:
     spec:
       containers:
         - name: inventory-service
-          image: <ECR_REGISTRY>/autonix/inventory-service:latest
+          image: 088153173875.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/inventory-service:latest
           ports:
             - containerPort: 8084
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "docker"
             - name: DB_URL
-              value: "jdbc:mysql://mysql-service:3306/inventory_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
+              value: "jdbc:mysql://autonix.cfsm44ue6k13.ap-northeast-2.rds.amazonaws.com:3306/inventory_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true"
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:

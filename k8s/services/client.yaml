@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: <ECR_REGISTRY>/autonix/client:latest
+          image: 088153173875.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/client:latest
           # 이미지 빌드 시 아래 ARG 주입 필요:
           # --build-arg VITE_LINE_API_URL=http://<ALB_DNS>/line
           # --build-arg VITE_SHIPPING_API_URL=http://<ALB_DNS>/shipping

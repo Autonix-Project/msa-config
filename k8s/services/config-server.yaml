@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: <ECR_REGISTRY>/autonix/config-server:latest
+          image: 088153173875.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/config-server:latest
           ports:
             - containerPort: 8888
           env:

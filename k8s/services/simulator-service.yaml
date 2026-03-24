@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: simulator-service
-          image: <ECR_REGISTRY>/autonix/simulator-service:latest
+          image: 088153173875.dkr.ecr.ap-northeast-2.amazonaws.com/autonix/simulator-service:latest
           ports:
             - containerPort: 8086
           env:
