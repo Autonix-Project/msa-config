@@ -94,9 +94,9 @@ services:
       context: ../client
       dockerfile: Dockerfile
       args:
-        VITE_LINE_API_URL: http://localhost:8083
-        VITE_SHIPPING_API_URL: http://localhost:8085
-        VITE_INVENTORY_API_URL: http://localhost:8084
+        VITE_LINE_API_URL: http://localhost:8081
+        VITE_SHIPPING_API_URL: http://localhost:8081
+        VITE_INVENTORY_API_URL: http://localhost:8081
         VITE_GATEWAY_URL: http://localhost:8081
     container_name: autonix-client
     ports:
@@ -160,6 +160,39 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+
+  # api-gateway 빌드 전 반드시 선행 필요:
+  #   cd ../api-gateway && ./gradlew bootJar
+  api-gateway:
+    build:
+      context: ../api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/order_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+      - DB_USERNAME=root
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD:-1234}
+      - JWT_SECRET=autonix-dev-secret-key-for-local-test
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - LINE_SERVICE_URL=http://line-service:8083
+      - ORDER_SERVICE_URL=http://order-service:8082
+      - INVENTORY_SERVICE_URL=http://inventory-service:8084
+      - SHIPPING_SERVICE_URL=http://shipping-service:8085
+      - SIMULATOR_SERVICE_URL=http://simulator-service:8086
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      line-service:
+        condition: service_started
+      shipping-service:
+        condition: service_started
+      inventory-service:
+        condition: service_started
 
 volumes:
   mysql-data:
